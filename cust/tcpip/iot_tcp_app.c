@@ -86,6 +86,13 @@ void app_handle_connection(void)
     {
         if(timer_expired(&user_timer))
         {
+
+            //iot_gpio_input(2, &sw1);
+            //iot_gpio_input(3, &sw2); 
+            
+            //printf_high("%u,%u\n", 0, 1);
+            //printf_high("%u,%u,%u,%u,%u", led0, led1, relay, sw1, sw2);
+
             timer_set(&user_timer, 5*CLOCK_SECOND);
         }
     }
