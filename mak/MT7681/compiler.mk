@@ -28,10 +28,11 @@
 # TOOLCHAINS DEFINE
 #*******************************************************************************
 #For Linux TS
-#TOOLCHAINS	=	/mtktools/Andestech/BSPv320/toolchains/nds32le-elf-newlib-v2j/bin
+TOOLCHAINS	=	/cygdrive/e/MT7681/nds32le-elf-newlib-v2j/bin
 
 #For Windows TS
-TOOLCHAINS	=	/cygdrive/C/cygwin/nds32le-elf-newlib-v2j/bin
+#TOOLCHAINS	=	/cygdrive/c/Andestech/BSPv310/toolchains/nds32le-elf-newlib-v2j/bin
+#TOOLCHAINS	=	/cygdrive/f/Cygwin/nds32le-elf-newlib-v2j/bin
 
 
 CROSS		=	$(TOOLCHAINS)/nds32le-elf
