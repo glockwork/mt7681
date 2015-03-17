@@ -1,1 +1,1 @@
-mt7681_uploader.exe -f src\out\sta\MT7681_sta_header.bin -c COM1
+mt7681_uploader.exe -f ..\out\sta\MT7681_sta_header.bin -c COM1
