@@ -52,6 +52,61 @@ iot_tcp_app_init(void)
 
 }
 
+/*  */
+void app_handle_connection(void)
+{
+    int i = 0;
+	int rst = 0;
+	uint8 *ptr_recv_buf = NULL;
+    uint32 pin_value = 0;
+	uint8 value = 0;
+    static struct timer user_timer; //create a timer;
+   
+    if(uip_newdata())
+    {
+        printf_high("TCP Server RX [%d] bytes:", uip_datalen());
+        iot_uart_output(uip_appdata, uip_datalen());
+        printf_high("\n");
+
+        ptr_recv_buf = (uint8 *)uip_appdata;
+		
+		iot_gpio_output(0, ptr_recv_buf[0] - '0');
+		iot_gpio_output(1, ptr_recv_buf[1] - '0');
+		iot_gpio_output(4, ptr_recv_buf[2] - '0');
+    }
+   
+    if (uip_poll())
+    {
+        if(timer_expired(&user_timer))
+        {
+            for(i=0;i<5;i++)
+            {
+                rst = iot_gpio_input(i, &pin_value);
+			    if(0 != rst)
+			    {
+			        printf_high("pin%d,iot_gpio_input:%d", i, rst);
+			    }
+				value = value << 1;
+				value = value | pin_value;
+            }
+			printf_high("value:0x%02x\n", value);
+
+					/* GPIO
+            GPIO0    LED0   OUT
+            GPIO1    LED1   OUT
+            GPIO2    SW1    IN
+            GPIO3    SW2    IN
+            GPIO4    RELAY OUT
+	      */
+	    iot_gpios_mode_chg(0x00000013);
+    	printf_high("GPIO configured.\n");
+            //printf_high("5 sec pass.\n");
+            //iot_gpio_read(0, &input, &Polarity);
+            timer_set(&user_timer, 5*CLOCK_SECOND);
+        }
+    }
+}
+
 /*---------------------------------------------------------------------------*/
 /*
  * In mt76xx_tcp_app.h we have defined the UIP_APPCALL macro to
@@ -64,6 +119,11 @@ void
 iot_tcp_appcall(void)
 {
     u16_t lport = HTONS(uip_conn->lport);
+
+    if (lport == UIP_TCP_LISTENPORTS)
+    {
+        app_handle_connection();
+    }
 
 #if UIP_HTTP_CLIENT_SUPPORT
     if (lport == http_clientPort) {

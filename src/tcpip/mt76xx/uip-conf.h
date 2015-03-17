@@ -182,6 +182,11 @@ typedef unsigned short uip_stats_t;
 
 #define UIP_HTTP_CLIENT_SUPPORT 1
 #define UIP_CLOUD_SERVER_SUPPORT 1
+
+/* 加入TCP监听端口 */
+#define UIP_TCP_LISTENPORTS (8001)
+
+
 /* Here we include the header file for the application(s) we use in
    our project. */
 /*#include "smtp.h"*/
