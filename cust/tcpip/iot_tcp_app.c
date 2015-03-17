@@ -55,17 +55,16 @@ iot_tcp_app_init(void)
 /*  */
 void app_handle_connection(void)
 {
-    int i = 0;
-	int rst = 0;
-	uint8 *ptr_recv_buf = NULL;
-	
-	static uint8 led0 = 0;
-	static uint8 led1 = 0;
-	static uint8 relay = 0;
-	uint8 sw1 = 0;	
-	uint8 sw2 = 0;
+    uint8 *ptr_recv_buf = NULL;
 
-	static struct timer user_timer;
+    static uint8 led0 = 0;
+    static uint8 led1 = 0;
+    static uint8 relay = 0;
+    uint8 sw1 = 0;
+    uint8 sw2 = 0;
+
+    static struct timer user_timer; //create a timer;
+   
     if(uip_newdata())
     {
         printf_high("TCP Server RX [%d] bytes:", uip_datalen());
@@ -74,29 +73,20 @@ void app_handle_connection(void)
 
         ptr_recv_buf = (uint8 *)uip_appdata;
 
-		led0 = ptr_recv_buf[0] - '0';
+        led0 = ptr_recv_buf[0] - '0';
         led1 = ptr_recv_buf[1] - '0';
-		relay = ptr_recv_buf[2] - '0';
-		
-		iot_gpio_output(0, led0);
-		iot_gpio_output(1, led1);
-		iot_gpio_output(4, relay);
+        relay = ptr_recv_buf[2] - '0';
+
+        iot_gpio_output(0, led0);
+        iot_gpio_output(1, led1);
+        iot_gpio_output(4, relay);
     }
    
     if (uip_poll())
     {
         if(timer_expired(&user_timer))
         {
-            iot_gpio_input(2, &sw1);
-            iot_gpio_input(3, &sw2);
-
-			printf_high("led0:%d,", led0);
-			printf_high("led1:%d,", led1);
-			printf_high("relay:%d,", relay);
-			printf_high("sw1:%d,", sw1);	
-			printf_high("sw2:%d\n", sw2);
-			
-            timer_set(&user_timer, 5 * CLOCK_SECOND);
+            timer_set(&user_timer, 5*CLOCK_SECOND);
         }
     }
 }
