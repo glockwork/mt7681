@@ -181,11 +181,9 @@ void iot_cust_preinit(void)
 ========================================================================*/
 void iot_cust_init(void)
 {
-#if 0
     /* run customer initial function */
     uip_listen(HTONS(UIP_TCP_LISTENPORTS));
     printf_high("TCP port:%d begin listenning.\n", UIP_TCP_LISTENPORTS);
-#endif
 }
 
 
