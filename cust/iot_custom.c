@@ -181,7 +181,11 @@ void iot_cust_preinit(void)
 ========================================================================*/
 void iot_cust_init(void)
 {
+#if 0
     /* run customer initial function */
+    uip_listen(HTONS(UIP_TCP_LISTENPORTS));
+    printf_high("TCP port:%d begin listenning.\n", UIP_TCP_LISTENPORTS);
+#endif
 }
 
 
@@ -347,8 +351,8 @@ void IoT_Cust_SM_Smnt(void)
 
     /*Step1:  create parameter to store the smnt information */
     /* or it is better to create a structure*/
-    uint8  Ssid[MAX_LEN_OF_SSID+1] = "belkin";
-    uint8  Passphase[CIPHER_TEXT_LEN] ="12345678" ;
+    uint8  Ssid[MAX_LEN_OF_SSID+1] = "22-2-3303";
+    uint8  Passphase[CIPHER_TEXT_LEN] ="19860417" ;
     uint8  PMK[CIPHER_TEXT_LEN];            //= "PMK1234";
 
     /* Must initialize Passphase and PMK  if no reference value be set on the above*/
