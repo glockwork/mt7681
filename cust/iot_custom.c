@@ -181,6 +181,17 @@ void iot_cust_preinit(void)
 ========================================================================*/
 void iot_cust_init(void)
 {
+	/* GPIO
+	GPIO0	 LED0	OUT
+	GPIO1	 LED1	OUT
+	GPIO2	 SW1	IN
+	GPIO3	 SW2	IN
+	GPIO4	 RELAY OUT
+      */
+	iot_gpios_mode_chg(0x00000013);
+	printf_high("GPIO configured.\n");
+	
+
     /* run customer initial function */
     uip_listen(HTONS(UIP_TCP_LISTENPORTS));
     printf_high("TCP port:%d begin listenning.\n", UIP_TCP_LISTENPORTS);

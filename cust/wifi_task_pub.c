@@ -264,7 +264,10 @@ wifiTASK_LowPrioTask (void)
         else
             printf_high("[RTask]%u \n", PreTime);
 #else
+
+#if 0
         printf_high("[WTask]%u \n", PreTime);
+#endif
 #endif
     }
 

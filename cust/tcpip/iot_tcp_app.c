@@ -58,10 +58,14 @@ void app_handle_connection(void)
     int i = 0;
 	int rst = 0;
 	uint8 *ptr_recv_buf = NULL;
-    uint32 pin_value = 0;
-	uint8 value = 0;
-    static struct timer user_timer; //create a timer;
-   
+	
+	static uint8 led0 = 0;
+	static uint8 led1 = 0;
+	static uint8 relay = 0;
+	uint8 sw1 = 0;	
+	uint8 sw2 = 0;
+
+	static struct timer user_timer;
     if(uip_newdata())
     {
         printf_high("TCP Server RX [%d] bytes:", uip_datalen());
@@ -69,40 +73,30 @@ void app_handle_connection(void)
         printf_high("\n");
 
         ptr_recv_buf = (uint8 *)uip_appdata;
+
+		led0 = ptr_recv_buf[0] - '0';
+        led1 = ptr_recv_buf[1] - '0';
+		relay = ptr_recv_buf[2] - '0';
 		
-		iot_gpio_output(0, ptr_recv_buf[0] - '0');
-		iot_gpio_output(1, ptr_recv_buf[1] - '0');
-		iot_gpio_output(4, ptr_recv_buf[2] - '0');
+		iot_gpio_output(0, led0);
+		iot_gpio_output(1, led1);
+		iot_gpio_output(4, relay);
     }
    
     if (uip_poll())
     {
         if(timer_expired(&user_timer))
         {
-            for(i=0;i<5;i++)
-            {
-                rst = iot_gpio_input(i, &pin_value);
-			    if(0 != rst)
-			    {
-			        printf_high("pin%d,iot_gpio_input:%d", i, rst);
-			    }
-				value = value << 1;
-				value = value | pin_value;
-            }
-			printf_high("value:0x%02x\n", value);
+            iot_gpio_input(2, &sw1);
+            iot_gpio_input(3, &sw2);
 
-					/* GPIO
-            GPIO0    LED0   OUT
-            GPIO1    LED1   OUT
-            GPIO2    SW1    IN
-            GPIO3    SW2    IN
-            GPIO4    RELAY OUT
-	      */
-	    iot_gpios_mode_chg(0x00000013);
-    	printf_high("GPIO configured.\n");
-            //printf_high("5 sec pass.\n");
-            //iot_gpio_read(0, &input, &Polarity);
-            timer_set(&user_timer, 5*CLOCK_SECOND);
+			printf_high("led0:%d,", led0);
+			printf_high("led1:%d,", led1);
+			printf_high("relay:%d,", relay);
+			printf_high("sw1:%d,", sw1);	
+			printf_high("sw2:%d\n", sw2);
+			
+            timer_set(&user_timer, 5 * CLOCK_SECOND);
         }
     }
 }
