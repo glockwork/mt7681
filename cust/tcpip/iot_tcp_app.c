@@ -57,11 +57,13 @@ void app_handle_connection(void)
 {
     uint8 *ptr_recv_buf = NULL;
 
-    static uint8 led0 = 0;
-    static uint8 led1 = 0;
-    static uint8 relay = 0;
+    uint8 led0 = 0;
+    uint8 led1 = 0;
+    uint8 relay = 0;
     uint8 sw1 = 0;
     uint8 sw2 = 0;
+
+    uint8 dir = 0;
 
     static struct timer user_timer; //create a timer;
    
@@ -86,12 +88,20 @@ void app_handle_connection(void)
     {
         if(timer_expired(&user_timer))
         {
+            iot_gpio_read(0, &led0, &dir); 
+            printf_high("led0:%u,dir:%u,", led0, dir);
 
-            //iot_gpio_input(2, &sw1);
-            //iot_gpio_input(3, &sw2); 
-            
-            //printf_high("%u,%u\n", 0, 1);
-            //printf_high("%u,%u,%u,%u,%u", led0, led1, relay, sw1, sw2);
+            iot_gpio_read(1, &led1, &dir);
+            printf_high("led1:%d,dir:%u,", led1, dir);
+
+            iot_gpio_read(2, &sw1, &dir);
+            printf_high("sw1:%d,dir:%u,", sw1, dir);
+
+            iot_gpio_read(3, &sw2, &dir);
+            printf_high("sw2:%d,dir:%u,", sw2, dir);
+
+            iot_gpio_read(4, &relay, &dir);
+            printf_high("relay:%d,dir:%u\n", relay, dir);
 
             timer_set(&user_timer, 5*CLOCK_SECOND);
         }
