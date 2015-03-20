@@ -214,6 +214,7 @@ clean :
 	@$(RM) $(BUILD_LOG)
 	@$(RM) $(DAT_PATH)/NDSROM.dat $(DAT_PATH)/NDSROM.list
 	@$(RM) $(OUT_PATH)/*
+	@$(RM) cscope.* tags
 
 # make dir in obj/
 .PHONY : mkdir
